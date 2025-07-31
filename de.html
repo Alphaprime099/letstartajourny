@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Journey Together</title>
+    <style>
+        /* --- Global Styles & Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500&display=swap');
+
+        :root {
+            --bg-color: #f4e8ff; /* Light Lavender */
+            --primary-text: #4a4a68; /* Soft Navy */
+            --accent-color-1: #ffdde1; /* Blush Pink */
+            --accent-color-2: #c6a2f7; /* Deeper Lavender */
+            --star-color: #ffffff;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Reusable Components & Layout --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        h1, h2 {
+            font-family: var(--font-heading);
+            font-weight: 500;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* --- Animations (Fade-in on Scroll) --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #191028 0%, #3d2f5a 100%); /* Starry Night Gradient */
+            color: var(--bg-color);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero__graphic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Starry Sky Animation */
+        @keyframes move-stars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100vh); }
+        }
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200vh; /* Taller to allow for seamless looping */
+            background-image:
+                radial-gradient(1px 1px at 20% 30%, var(--star-color), transparent),
+                radial-gradient(1px 1px at 80% 10%, var(--star-color), transparent),
+                radial-gradient(1px 1px at 50% 50%, var(--star-color), transparent),
+                radial-gradient(2px 2px at 90% 40%, var(--star-color), transparent),
+                radial-gradient(1px 1px at 10% 90%, var(--star-color), transparent),
+                radial-gradient(1px 1px at 40% 70%, var(--star-color), transparent),
+                radial-gradient(2px 2px at 70% 80%, var(--star-color), transparent);
+            animation: move-stars 150s linear infinite;
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInContent 2s ease-in-out;
+        }
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hero__title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem); /* Responsive font size */
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--bg-color);
+            border: 2px solid var(--accent-color-2);
+            padding: 12px 30px;
+            font-size: 1rem;
+            text-decoration: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.4s, color 0.4s, transform 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-color-2);
+            color: #191028;
+            transform: translateY(-3px);
+        }
+
+        /* --- Custom Graphic: Silhouettes --- */
+        .silhouettes {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            height: 40%;
+            z-index: 1;
+        }
+        .silhouette-1, .silhouette-2 {
+            position: absolute;
+            bottom: 0;
+            animation-duration: 3s;
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-in-out;
+        }
+        .silhouette-1 { left: -10%; opacity: 0; animation-name: walkInLeft; animation-delay: 0.5s; }
+        .silhouette-2 { right: -10%; opacity: 0; animation-name: walkInRight; animation-delay: 0.5s; }
+
+        @keyframes walkInLeft {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(calc(50% - 70px)); opacity: 1; }
+        }
+        @keyframes walkInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(calc(-50% + 70px)); opacity: 1; }
+        }
+
+        /* --- Why Us Section --- */
+        #why-us {
+            background-color: var(--bg-color);
+        }
+
+        .why-us__quote {
+            font-family: var(--font-heading);
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #6a5a7f;
+        }
+
+        /* --- My Promise Section --- */
+        #my-promise {
+            background-color: var(--accent-color-1);
+        }
+
+        .promise-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+            display: grid;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .promise-item {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .promise-item::before {
+            content: '♡';
+            color: var(--accent-color-2);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        /* --- Final Section --- */
+        #final-message {
+            background-color: var(--bg-color);
+        }
+
+        .final-message__text {
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background: #e9d8ff;
+            font-size: 0.9rem;
+        }
+        
+        /* --- Responsive Adjustments --- */
+        @media (min-width: 768px) {
+            .promise-list {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero__graphic">
+            <div class="stars"></div>
+        </div>
+        <div class="silhouettes">
+            <svg class="silhouette-1" width="100" height="200" viewBox="0 0 100 200" fill="#110a1f" xmlns="http://www.w3.org/2000/svg">
+                <path d="M49.5 25C40.65 25 33.5 32.15 33.5 41C33.5 49.85 40.65 57 49.5 57C58.35 57 65.5 49.85 65.5 41C65.5 32.15 58.35 25 49.5 25ZM25 79C21.13 79 18 82.13 18 86V130L30 198H40L32 135L44 88H55L68 135L60 198H70L82 130V86C82 82.13 78.87 79 75 79H25Z"/>
+            </svg>
+            <svg class="silhouette-2" width="100" height="200" viewBox="0 0 100 200" fill="#110a1f" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50.5 22C41.65 22 34.5 29.15 34.5 38C34.5 46.85 41.65 54 50.5 54C59.35 54 66.5 46.85 66.5 38C66.5 29.15 59.35 22 50.5 22ZM28 72V140L22 198H32L38 145L48 90H53L63 145L69 198H79L73 140V72C73 67.58 69.42 64 65 64H36C31.58 64 28 67.58 28 72Z"/>
+            </svg>
+        </div>
+        <div class="hero__content">
+            <h1 class="hero__title">Will We Start a Journey Together?</h1>
+            <p class="hero__subtitle">No labels. No promises. Just two souls healing and building a future — together.</p>
+            <a href="#why-us" class="cta-button">Let’s Begin Together</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="why-us" class="container">
+            <div class="fade-in">
+                <h2 class="why-us__quote">“We may not be perfect, but maybe our flaws can heal each other.”</h2>
+            </div>
+        </section>
+
+        <section id="my-promise" class="container">
+            <div class="fade-in">
+                <h2 style="margin-bottom: 2rem;">My Promise</h2>
+                <ul class="promise-list">
+                    <li class="promise-item">To listen without judgment.</li>
+                    <li class="promise-item">To stay when it’s hard.</li>
+                    <li class="promise-item">To grow with you, not away from you.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="final-message" class="container">
+            <div class="fade-in">
+                 <p class="final-message__text">
+                    You don’t have to say yes now. Just know — I’ll always be here, waiting with open arms and a heart that chose you.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025. A story waiting to be written.</p>
+    </footer>
+
+    <script>
+        // --- JavaScript for Fade-in Animation on Scroll ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in');
+
+            const appearOptions = {
+                threshold: 0.5, // Trigger when 50% of the element is visible
+                rootMargin: "0px 0px -50px 0px" // Start animation a bit sooner
+            };
+
+            const appearOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once it's visible
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+
+    </script>
+</body>
+</html>
